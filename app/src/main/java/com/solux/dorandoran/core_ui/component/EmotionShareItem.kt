@@ -85,7 +85,7 @@ fun EmotionShareItem(
                     color = Neutral60,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f).padding(top = 8.dp)
                 )
             }
 
@@ -114,7 +114,7 @@ fun EmotionShareItem(
                 Spacer(modifier = Modifier.width(10.dp))
 
                 Text(
-                    text = emotion.userName,
+                    text = emotion.nickname,
                     style = smallRegular,
                     color = Neutral60,
                     maxLines = 1,

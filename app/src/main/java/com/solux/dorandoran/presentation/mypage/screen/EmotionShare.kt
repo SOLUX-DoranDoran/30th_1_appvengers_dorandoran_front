@@ -16,10 +16,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -38,6 +40,7 @@ import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.presentation.mypage.navigation.MypageNavigator
 import com.solux.dorandoran.presentation.mypage.viewmodel.EmotionShareViewModel
 
+
 @Composable
 fun EmotionShareRoute(
     navigator: MypageNavigator,
@@ -54,6 +57,10 @@ fun EmotionShare(
     navigator: MypageNavigator,
     viewModel: EmotionShareViewModel
 ) {
+    val quoteList by viewModel.quoteList
+    val isLoading by viewModel.isLoading
+    val errorMessage by viewModel.errorMessage
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -63,23 +70,59 @@ fun EmotionShare(
             modifier = Modifier.fillMaxSize()
         ) {
             EmotionShareHeader(
-                onBackClick = { navigator.navController.popBackStack() }
+                onBackClick = { navigator.navigateToHome() }
             )
 
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-                contentPadding = PaddingValues(bottom = 100.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                itemsIndexed(viewModel.emotionShareList) { index, emotion ->
-                    EmotionShareListItem(
-                        emotion = emotion,
-                        itemIndex = index,
-                        onLikeClick = {
-                            viewModel.toggleLike(emotion.id)
+            when {
+                isLoading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = Button02)
+                    }
+                }
+
+                errorMessage != null -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                text = errorMessage ?: "오류가 발생했습니다.",
+                                color = Neutral60
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "다시 시도",
+                                color = Button02,
+                                modifier = Modifier.clickable {
+                                    viewModel.clearErrorMessage()
+                                    viewModel.refreshQuotes()
+                                }
+                            )
                         }
-                    )
+                    }
+                }
+
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        contentPadding = PaddingValues(bottom = 100.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        itemsIndexed(quoteList) { index, quote ->
+                            EmotionShareListItem(
+                                quote = quote,
+                                itemIndex = index,
+                                onLikeClick = {
+                                    viewModel.toggleLike(quote.id)
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }

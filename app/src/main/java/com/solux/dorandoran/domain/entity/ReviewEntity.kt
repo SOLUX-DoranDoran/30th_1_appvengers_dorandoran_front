@@ -8,5 +8,10 @@ data class ReviewEntity(
     val rating: Int,
     val createdAt: String,
     val nickname: String,
-    val profileImage: String
+    val profileImage: String,
+    val bookId: Long,
+    val userId: Long,
+    val likeCount: Int = 0,
+    val commentCount: Int = 0,
+    val isLiked: Boolean = false
 )

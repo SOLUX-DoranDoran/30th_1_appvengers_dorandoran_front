@@ -1,11 +1,7 @@
 package com.solux.dorandoran.data.datasource
 
-import com.solux.dorandoran.data.dto.response.BookInfoResponseGetDto
-import retrofit2.Response
+import com.solux.dorandoran.data.dto.response.ResponseGetBookDto
 
 interface BookDataSource {
-    suspend fun getBookInfo(
-        token: String,
-        bookId: Int
-    ): BookInfoResponseGetDto
+    suspend fun getBookInfo(bookId: Long): ResponseGetBookDto
 }

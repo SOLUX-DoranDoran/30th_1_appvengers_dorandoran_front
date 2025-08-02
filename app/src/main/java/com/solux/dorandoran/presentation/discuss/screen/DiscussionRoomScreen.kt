@@ -6,9 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -18,11 +15,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.solux.dorandoran.R
 import com.solux.dorandoran.core_ui.component.DiscussionBookBox
 import com.solux.dorandoran.core_ui.component.DiscussionRoomBox
 import com.solux.dorandoran.core_ui.theme.Background02
@@ -31,7 +31,7 @@ import com.solux.dorandoran.core_ui.theme.Button02
 import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.largeBold
-import com.solux.dorandoran.domain.entity.BookInfoEntity
+import com.solux.dorandoran.domain.entity.BookEntity
 import com.solux.dorandoran.domain.entity.DiscussCommentEntity
 import com.solux.dorandoran.domain.entity.DiscussPageEntity
 import com.solux.dorandoran.presentation.discuss.viewmodel.DiscussViewModel
@@ -71,7 +71,7 @@ fun DiscussionRoomRoute(
 @Composable
 fun DiscussionRoomScreen(
     selectedBook: DiscussPageEntity,
-    book: BookInfoEntity,
+    book: BookEntity,
     discussionsForBook: List<DiscussPageEntity>,
     argumentViewModel: ArgumentViewModel,
     onBackClick: () -> Unit = {},
@@ -98,12 +98,16 @@ fun DiscussionRoomScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "이전 화면")
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_back),
+                            contentDescription = null)
                     }
                 },
                 actions = {
                     IconButton(onClick = onAddClick) {
-                        Icon(imageVector = Icons.Default.Add, contentDescription = "토론 추가")
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_emotionsharescreen_plus),
+                            contentDescription = null)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -151,7 +155,7 @@ fun DiscussionRoomScreen(
                     discussion = discussion,
                     onClick = {
                         println("Box Clicked")
-                        onDiscussionClick(discussion.id) },
+                        onDiscussionClick(discussion.boardId) },
                     modifier = Modifier
                         .padding(15.dp),
                     argument = authorArgument

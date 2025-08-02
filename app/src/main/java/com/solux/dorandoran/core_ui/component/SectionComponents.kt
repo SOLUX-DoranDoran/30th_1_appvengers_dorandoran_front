@@ -25,15 +25,16 @@ import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.baseRegular
 import com.solux.dorandoran.core_ui.theme.largeBold
-import com.solux.dorandoran.domain.entity.BookEntity
 import com.solux.dorandoran.domain.entity.DiscussionEntity
 import com.solux.dorandoran.domain.entity.EmotionShareEntity
-import com.solux.dorandoran.domain.entity.ReviewEntity
+import com.solux.dorandoran.domain.entity.QuoteEntity
+import com.solux.dorandoran.domain.entity.RecommendedBookEntity
+import com.solux.dorandoran.domain.entity.ReviewListEntity
 
 @Composable
 fun BookRecommendationSection(
-    books: List<BookEntity>,
-    onBookClick: (BookEntity) -> Unit,
+    books: List<RecommendedBookEntity>,
+    onBookClick: (RecommendedBookEntity) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -92,8 +93,8 @@ fun BookRecommendationSection(
 }
 
 @Composable
-fun RecentReviewsSection(
-    review: ReviewEntity?,
+fun RecentReviewSection(
+    review: ReviewListEntity,
     onReviewClick: (Long) -> Unit,
     onMoreClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -110,10 +111,10 @@ fun RecentReviewsSection(
                 .padding(bottom = 12.dp)
         )
 
-        review?.let {
-            ReviewItem(
-                review = it,
-                onClick = { onReviewClick(it.id) }
+        review.let {
+            RecentReviewItem(
+                review = review,
+                onClick = { onReviewClick(review.reviewId) }
             )
         }
     }
@@ -141,7 +142,7 @@ fun HotDiscussionsSection(
         discussion?.let {
             DiscussionItem(
                 discussion = it,
-                onClick = { onDiscussionClick(it.id) }
+                onClick = { onDiscussionClick(it.boardId) }
             )
         }
     }
@@ -149,7 +150,7 @@ fun HotDiscussionsSection(
 
 @Composable
 fun EmotionShareSection(
-    emotionShare: EmotionShareEntity?,
+    quote: QuoteEntity?,
     onEmotionClick: (Long) -> Unit,
     onMoreClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -166,9 +167,18 @@ fun EmotionShareSection(
                 .padding(bottom = 12.dp)
         )
 
-        emotionShare?.let {
+        quote?.let {
             EmotionShareItem(
-                emotion = it,
+                emotion = EmotionShareEntity(
+                    id = it.id,
+                    bookId = it.bookId,
+                    bookTitle = it.bookTitle,
+                    coverImageUrl = it.coverImageUrl,
+                    content = it.content,
+                    createdAt = it.createdAt,
+                    nickname = it.nickname,
+                    profileImage = it.profileImage ?: ""
+                ),
                 onClick = { onEmotionClick(it.id) }
             )
         }

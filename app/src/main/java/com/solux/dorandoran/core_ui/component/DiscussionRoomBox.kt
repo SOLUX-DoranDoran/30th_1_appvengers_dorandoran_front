@@ -44,7 +44,7 @@ fun DiscussionRoomBox(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onClick(discussion.id) }
+            .clickable { onClick(discussion.boardId) }
             .border(1.dp, Button02, RoundedCornerShape(12.dp)),
         shape= RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Background01),

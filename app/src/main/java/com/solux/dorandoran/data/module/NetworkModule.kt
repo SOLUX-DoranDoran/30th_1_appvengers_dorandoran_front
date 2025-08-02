@@ -8,6 +8,7 @@ import com.solux.dorandoran.data.service.AuthApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -64,7 +65,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
-        context: Context,
+        @ApplicationContext context: Context,
         authApiService: AuthApiService,
         loggingInterceptor: HttpLoggingInterceptor
     ): OkHttpClient {

@@ -10,9 +10,9 @@ class HomeNavigator(
         navController.navigate("recent_review")
     }
 
-    // 전체 리뷰 화면으로 이동
-    fun navigateToReviewTotal() {
-        navController.navigate("review_total")
+    // 리뷰 상세 화면으로 이동
+    fun navigateToReviewDetail(bookId: Long) {
+        navController.navigate("review_detail/$bookId")
     }
 
     // 전체 토론 화면으로 이동
@@ -29,4 +29,6 @@ class HomeNavigator(
     fun navigateToEmotionShare() {
         navController.navigate("emotion_share")
     }
+
+
 }

@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.solux.dorandoran.core_ui.theme.Background01
 import com.solux.dorandoran.core_ui.theme.Background02
 import com.solux.dorandoran.core_ui.theme.Button02
@@ -32,16 +33,21 @@ import com.solux.dorandoran.core_ui.theme.Neutral80
 import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.baseRegular
 import com.solux.dorandoran.presentation.mypage.navigation.MypageNavigator
+import com.solux.dorandoran.presentation.mypage.viewmodel.EmotionShareViewModel
 
 @Composable
 fun EmotionShareNewRoute(
-    navigator: MypageNavigator
+    navigator: MypageNavigator,
+    viewModel: EmotionShareViewModel = hiltViewModel()
 ) {
-    EmotionShareNew(navigator = navigator)
+    EmotionShareNew(
+        navigator = navigator,
+        viewModel = viewModel
+    )
 }
 
 @Composable
-fun EmotionShareNew(navigator: MypageNavigator) {
+fun EmotionShareNew(navigator: MypageNavigator, viewModel: EmotionShareViewModel) {
     var bookTitle by remember { mutableStateOf("") }
     var quote by remember { mutableStateOf("") }
 
@@ -126,7 +132,16 @@ fun EmotionShareNew(navigator: MypageNavigator) {
 
         Button(
             onClick = {
-                navigator.navigateToEmotionShare()
+                if (quote.isNotEmpty() && bookTitle.isNotEmpty()) {
+                    val bookId = findBookIdByTitle(bookTitle)
+
+                    viewModel.postQuote(
+                        content = quote,
+                        bookId = bookId
+                    )
+
+                    navigator.navigateToEmotionShare()
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -145,5 +160,36 @@ fun EmotionShareNew(navigator: MypageNavigator) {
         }
 
         Spacer(modifier = Modifier.height(40.dp))
+    }
+}
+
+private fun findBookIdByTitle(bookTitle: String): Long {
+    return when (bookTitle.trim()) {
+        "나미야 잡화점의 기적" -> 1L
+        "미드나잇 라이브러리" -> 2L
+        "파친코" -> 3L
+        "데미안" -> 4L
+        "달러구트 꿈 백화점" -> 5L
+        "불편한 편의점" -> 6L
+        "아몬드" -> 7L
+        "쇼코의 미소" -> 8L
+        "소년이 온다" -> 9L
+        "아가미" -> 10L
+        else -> {
+            when {
+                bookTitle.contains("나미야", ignoreCase = true) -> 1L
+                bookTitle.contains("미드나잇", ignoreCase = true) || bookTitle.contains("라이브러리", ignoreCase = true) -> 2L
+                bookTitle.contains("파친코", ignoreCase = true) -> 3L
+                bookTitle.contains("데미안", ignoreCase = true) -> 4L
+                bookTitle.contains("달러구트", ignoreCase = true) || bookTitle.contains("백화점", ignoreCase = true) -> 5L
+                bookTitle.contains("불편한", ignoreCase = true) || bookTitle.contains("편의점", ignoreCase = true) -> 6L
+                bookTitle.contains("아몬드", ignoreCase = true) -> 7L
+                bookTitle.contains("쇼코", ignoreCase = true) || bookTitle.contains("미소", ignoreCase = true) -> 8L
+                bookTitle.contains("소년", ignoreCase = true) -> 9L
+                bookTitle.contains("아가미", ignoreCase = true) -> 10L
+
+                else -> 1L
+            }
+        }
     }
 }

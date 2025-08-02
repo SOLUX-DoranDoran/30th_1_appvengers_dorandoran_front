@@ -8,9 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -26,15 +25,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.solux.dorandoran.R
 import com.solux.dorandoran.core_ui.theme.Background02
 import com.solux.dorandoran.core_ui.theme.Background01
 import com.solux.dorandoran.core_ui.theme.Button02
 import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.Neutral70
 import com.solux.dorandoran.core_ui.theme.baseBold
-import com.solux.dorandoran.core_ui.theme.baseRegular
 import com.solux.dorandoran.presentation.discuss.viewmodel.DiscussViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -63,7 +64,11 @@ fun AddDiscussionScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "이전 화면")
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_back),
+                            contentDescription = null,
+                            modifier = Modifier.size(25.dp)
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

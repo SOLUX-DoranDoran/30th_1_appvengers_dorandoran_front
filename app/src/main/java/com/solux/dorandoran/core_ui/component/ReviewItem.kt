@@ -23,9 +23,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.solux.dorandoran.R
 import com.solux.dorandoran.core_ui.theme.Background01
 import com.solux.dorandoran.core_ui.theme.Background03
@@ -46,7 +48,7 @@ fun ReviewItem(
             .fillMaxWidth()
             .padding(horizontal = 21.dp)
             .height(202.dp)
-            .clickable { onClick() } // 클릭 기능 추가
+            .clickable { onClick() }
             .border(2.dp, Background01, RoundedCornerShape(15.dp)),
         colors = CardDefaults.cardColors(containerColor = Background01),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -57,7 +59,7 @@ fun ReviewItem(
                 .fillMaxWidth()
                 .padding(20.dp)
         ) {
-            BookImageBox()
+            BookImageBox(review = review)
 
             Spacer(modifier = Modifier.width(20.dp))
 
@@ -67,13 +69,19 @@ fun ReviewItem(
 }
 
 @Composable
-private fun BookImageBox() {
-    Box(
+fun BookImageBox(
+    review: ReviewEntity
+) {
+    AsyncImage(
+        model = review.coverImageUrl,
+        contentDescription = null,
         modifier = Modifier
-            .width(107.dp)
-            .height(155.dp)
+            .size(width = 107.dp, height = 155.dp)
             .clip(RoundedCornerShape(10.dp))
-            .background(Background03)
+            .background(Background03),
+        contentScale = ContentScale.Crop,
+        placeholder = painterResource(id = R.drawable.ic_launcher_background),
+        error = painterResource(id = R.drawable.ic_launcher_background)
     )
 }
 
@@ -97,7 +105,10 @@ private fun ReviewContent(review: ReviewEntity) {
             overflow = TextOverflow.Ellipsis
         )
 
-        ReviewerInfo(nickname = review.nickname)
+        ReviewerInfo(
+            nickname = review.nickname,
+            createdAt = review.createdAt
+        )
     }
 }
 
@@ -106,9 +117,9 @@ private fun RatingStars(rating: Int) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         repeat(5) { index ->
             val iconRes = if (index < rating) {
-                R.drawable.ic_home_star_fill
+                R.drawable.ic_star_filled
             } else {
-                R.drawable.ic_home_star
+                R.drawable.ic_star
             }
             Image(
                 painter = painterResource(id = iconRes),
@@ -120,19 +131,29 @@ private fun RatingStars(rating: Int) {
 }
 
 @Composable
-private fun ReviewerInfo(nickname: String) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Box(
-            modifier = Modifier
-                .size(24.dp)
-                .clip(CircleShape)
-                .background(Background03)
-        )
+private fun ReviewerInfo(nickname: String, createdAt: String) {
+    Column {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(24.dp)
+                    .clip(CircleShape)
+                    .background(Background03)
+            )
 
-        Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Text(
+                text = nickname,
+                style = smallRegular,
+                color = Neutral70
+            )
+        }
+
+        Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = nickname,
+            text = createdAt,
             style = smallRegular,
             color = Neutral70
         )

@@ -34,11 +34,131 @@ import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.baseRegular
 import com.solux.dorandoran.core_ui.theme.smallRegular
-import com.solux.dorandoran.domain.entity.EmotionShareEntity
+import com.solux.dorandoran.domain.entity.QuoteEntity
+
+@Composable
+fun QuoteContentRow(
+    content: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.Top
+    ) {
+        Text(
+            text = "\"",
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 40.sp,
+            color = Button02,
+            modifier = Modifier.width(24.dp)
+        )
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Text(
+            text = content,
+            style = baseRegular,
+            color = Neutral60,
+            modifier = Modifier.weight(1f)
+        )
+    }
+}
+
+@Composable
+fun BottomActionRow(
+    nickname: String,
+    isLiked: Boolean,
+    likeCount: Int,
+    onLikeClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // 사용자 프로필 정보
+        UserProfileSection(nickname = nickname)
+
+        // 좋아요 버튼 - ReviewDetailCard 스타일과 동일
+        LikeActionButton(
+            isLiked = isLiked,
+            likeCount = likeCount,
+            onLikeClick = onLikeClick
+        )
+    }
+}
+
+@Composable
+fun UserProfileSection(
+    nickname: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+                .border(1.dp, Button02, CircleShape)
+                .background(Background03)
+        )
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Text(
+            text = nickname,
+            style = smallRegular,
+            color = Neutral60
+        )
+    }
+}
+
+@Composable
+fun LikeActionButton(
+    isLiked: Boolean,
+    likeCount: Int,
+    onLikeClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(1.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clickable { onLikeClick() },
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(
+                    id = if (isLiked) {
+                        R.drawable.ic_emotionsharescreen_heart_fill
+                    } else {
+                        R.drawable.ic_emotionsharesreen_heart
+                    }
+                ),
+                contentDescription = null,
+                modifier = Modifier.size(25.dp),
+                tint = Color.Unspecified
+            )
+        }
+
+        Text(
+            text = likeCount.toString(),
+            style = smallRegular,
+            color = if (isLiked) Button02 else Neutral60
+        )
+    }
+}
 
 @Composable
 fun EmotionShareListItem(
-    emotion: EmotionShareEntity,
+    quote: QuoteEntity,
     itemIndex: Int,
     onLikeClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -60,8 +180,9 @@ fun EmotionShareListItem(
                 .fillMaxWidth()
                 .padding(20.dp)
         ) {
+            // 책 제목
             Text(
-                text = emotion.bookTitle,
+                text = quote.bookTitle,
                 style = baseBold,
                 color = Neutral60,
                 modifier = Modifier.fillMaxWidth()
@@ -69,80 +190,18 @@ fun EmotionShareListItem(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top
-            ) {
-                Text(
-                    text = "\"",
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 40.sp,
-                    color = Button02,
-                    modifier = Modifier.width(24.dp)
-                )
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Text(
-                    text = emotion.content,
-                    style = baseRegular,
-                    color = Neutral60,
-                    modifier = Modifier.weight(1f)
-                )
-            }
+            // 인용문 내용
+            QuoteContentRow(content = quote.content)
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(32.dp)
-                            .clip(CircleShape)
-                            .border(1.dp, Button02, CircleShape)
-                            .background(Background03)
-                    )
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    Text(
-                        text = emotion.userName,
-                        style = smallRegular,
-                        color = Neutral60
-                    )
-                }
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable { onLikeClick() }
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(
-                            id = if (emotion.isLiked) {
-                                R.drawable.ic_emotionsharescreen_heart_fill
-                            } else {
-                                R.drawable.ic_emotionsharesreen_heart
-                            }),
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp),
-                        tint = Color.Unspecified
-                    )
-
-                    Spacer(modifier = Modifier.width(4.dp))
-
-                    Text(
-                        text = emotion.likeCount.toString(),
-                        style = smallRegular,
-                        color = if (emotion.isLiked) Button02 else Neutral60
-                    )
-                }
-            }
+            // 사용자 정보 및 좋아요 버튼
+            BottomActionRow(
+                nickname = quote.nickname,
+                isLiked = quote.isLiked, // 수정: QuoteEntity에서 직접 가져오기
+                likeCount = quote.likeCount, // 수정: QuoteEntity에서 직접 가져오기
+                onLikeClick = onLikeClick
+            )
         }
     }
 }

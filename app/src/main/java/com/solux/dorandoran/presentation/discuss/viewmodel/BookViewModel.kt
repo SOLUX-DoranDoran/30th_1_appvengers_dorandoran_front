@@ -2,7 +2,7 @@ package com.solux.dorandoran.presentation.discuss.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.solux.dorandoran.domain.entity.BookInfoEntity
+import com.solux.dorandoran.domain.entity.BookEntity
 import com.solux.dorandoran.domain.repository.BookRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 sealed interface BookUiState {
     object Loading : BookUiState
-    data class Success(val book: BookInfoEntity) : BookUiState
+    data class Success(val book: BookEntity) : BookUiState
     data class Error(val message: String) : BookUiState
 }
 
@@ -21,7 +21,7 @@ class BookViewModel(
     private val _uiState = MutableStateFlow<BookUiState>(BookUiState.Loading)
     val uiState: StateFlow<BookUiState> = _uiState
 
-    fun fetchBookInfo(bookId: Int) {
+    fun fetchBookInfo(bookId: Long) {
         _uiState.value = BookUiState.Loading
         viewModelScope.launch {
             val result = bookRepository.getBookInfo(bookId)

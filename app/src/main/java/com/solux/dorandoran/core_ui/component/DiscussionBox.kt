@@ -22,8 +22,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.solux.dorandoran.R
 import com.solux.dorandoran.core_ui.theme.Background01
 import com.solux.dorandoran.core_ui.theme.Background03
 import com.solux.dorandoran.core_ui.theme.Neutral60
@@ -31,6 +35,7 @@ import com.solux.dorandoran.core_ui.theme.Neutral70
 import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.baseRegular
 import com.solux.dorandoran.core_ui.theme.smallRegular
+import com.solux.dorandoran.domain.entity.BookEntity
 import com.solux.dorandoran.domain.entity.DiscussCommentEntity
 import com.solux.dorandoran.domain.entity.DiscussPageEntity
 
@@ -87,7 +92,6 @@ fun DiscussionBox(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // 프로필 이미지 (임시)
                     Box(
                         modifier = Modifier
                             .size(30.dp)

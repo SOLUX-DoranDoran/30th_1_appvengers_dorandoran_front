@@ -2,9 +2,7 @@ package com.solux.dorandoran.presentation.discuss.screen
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -21,11 +19,15 @@ import com.solux.dorandoran.core_ui.theme.Background02
 import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.baseBold
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import com.solux.dorandoran.R
 import com.solux.dorandoran.core_ui.component.ArgumentInputBox
 import com.solux.dorandoran.core_ui.component.DiscussionCommentBox
 import com.solux.dorandoran.domain.entity.DiscussPageEntity
@@ -66,8 +68,8 @@ fun DiscussionTopicScreen(
     var argumentText by remember { mutableStateOf("") } // argument 입력용
 
     // 토론 댓글들 로드
-    LaunchedEffect(discussion.id) {
-        argumentViewModel.loadCommentsForDiscussion(discussion.id)
+    LaunchedEffect(discussion.boardId) {
+        argumentViewModel.loadCommentsForDiscussion(discussion.boardId)
     }
 
     // 🎯 임시 더미 데이터로 개설자 의견 생성
@@ -91,7 +93,11 @@ fun DiscussionTopicScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "이전 화면")
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_back),
+                            contentDescription = null,
+                            modifier = Modifier.size(25.dp)
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

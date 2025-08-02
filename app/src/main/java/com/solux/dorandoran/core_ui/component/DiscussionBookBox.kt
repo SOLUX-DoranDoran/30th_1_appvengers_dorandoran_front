@@ -32,13 +32,13 @@ import com.solux.dorandoran.core_ui.theme.Neutral80
 import com.solux.dorandoran.core_ui.theme.largeBold
 import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.smallRegular
-import com.solux.dorandoran.domain.entity.BookInfoEntity
+import com.solux.dorandoran.domain.entity.BookEntity
 import com.solux.dorandoran.domain.entity.DiscussPageEntity
 
 @Composable
 fun DiscussionBookBox(
     discussion: DiscussPageEntity,
-    book: BookInfoEntity,
+    book: BookEntity,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {

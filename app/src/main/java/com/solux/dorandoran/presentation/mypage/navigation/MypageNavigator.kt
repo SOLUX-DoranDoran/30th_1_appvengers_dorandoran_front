@@ -12,4 +12,13 @@ class MypageNavigator(
     fun navigateToEmotionShare() {
         navController.navigate("emotion_share")
     }
+
+    fun navigateToHome() {
+        navController.navigate("main") {
+            popUpTo("emotion_share") {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+    }
 }

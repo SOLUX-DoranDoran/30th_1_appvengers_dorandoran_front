@@ -9,8 +9,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.State
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+@HiltViewModel
 class ArgumentViewModel @Inject constructor(
     private val argumentRepository: ArgumentRepository
 ) : ViewModel() {
@@ -20,6 +22,17 @@ class ArgumentViewModel @Inject constructor(
 
     var argumentInput by mutableStateOf("")
         private set
+
+    // 수정: 댓글 입력 상태 관리 추가
+    private val _activeCommentInputMap = mutableStateOf<Map<Int, Boolean>>(emptyMap())
+    val activeCommentInputMap: State<Map<Int, Boolean>> = _activeCommentInputMap
+
+    // 수정: 토론별 댓글 데이터 관리
+    private val _discussionComments = mutableStateOf<Map<Int, List<DiscussCommentEntity>>>(emptyMap())
+    val discussionComments: State<Map<Int, List<DiscussCommentEntity>>> = _discussionComments
+
+    // 수정: 임시 더미 데이터
+    private val dummyComments = mutableMapOf<Int, List<DiscussCommentEntity>>()
 
     fun updateArgumentInput(newInput: String) {
         argumentInput = newInput
@@ -60,8 +73,72 @@ class ArgumentViewModel @Inject constructor(
         }
     }
 
-}
+    // 수정: 댓글 입력 토글 메서드 추가
+    fun toggleCommentInput(argumentId: Int) {
+        val currentMap = _activeCommentInputMap.value.toMutableMap()
+        currentMap[argumentId] = !(currentMap[argumentId] ?: false)
+        _activeCommentInputMap.value = currentMap
+    }
 
+    // 수정: 토론별 댓글 로드 메서드 추가
+    fun loadCommentsForDiscussion(discussionId: Int) {
+        // 임시 더미 데이터 생성
+        val dummyComments = listOf(
+            DiscussCommentEntity(
+                id = 1,
+                memberNickname = "사용자1",
+                content = "이 의견에 동의합니다.",
+                createdAt = "2024-01-01",
+                parentId = null
+            ),
+            DiscussCommentEntity(
+                id = 2,
+                memberNickname = "사용자2",
+                content = "반대 의견입니다.",
+                createdAt = "2024-01-02",
+                parentId = null
+            )
+        )
+
+        val currentComments = _discussionComments.value.toMutableMap()
+        currentComments[discussionId] = dummyComments
+        _discussionComments.value = currentComments
+    }
+
+    // 수정: 메인 argument들만 가져오는 메서드 추가
+    fun getMainArguments(): List<DiscussCommentEntity> {
+        return when (val state = _uiState.value) {
+            is ArgumentUiState.Success -> state.arguments.filter { it.parentId == null }
+            else -> {
+                // 임시 더미 데이터 반환
+                listOf(
+                    DiscussCommentEntity(
+                        id = 1,
+                        memberNickname = "토론자1",
+                        content = "첫 번째 의견입니다.",
+                        createdAt = "2024-01-01",
+                        parentId = null
+                    ),
+                    DiscussCommentEntity(
+                        id = 2,
+                        memberNickname = "토론자2",
+                        content = "두 번째 의견입니다.",
+                        createdAt = "2024-01-02",
+                        parentId = null
+                    )
+                )
+            }
+        }
+    }
+
+    // 수정: 특정 argument에 대한 댓글들 가져오는 메서드 추가
+    fun getCommentsForArgument(argumentId: Int): List<DiscussCommentEntity> {
+        return when (val state = _uiState.value) {
+            is ArgumentUiState.Success -> state.arguments.filter { it.parentId == argumentId }
+            else -> emptyList()
+        }
+    }
+}
 
 sealed interface ArgumentUiState {
     object Loading : ArgumentUiState
