@@ -12,7 +12,6 @@ import com.solux.dorandoran.data.dto.response.ResponseReviewLikeDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -21,7 +20,6 @@ interface ReviewApiService {
 
     @GET("/api/reviews")
     suspend fun getRecentReviews(
-        @Header("Authorization") authorization: String,
         @Query("sort") sort: String = "recent",
         @Query("page") page: Int = 1,
         @Query("size") size: Int = 10
@@ -29,13 +27,11 @@ interface ReviewApiService {
 
     @GET("/api/reviews/recent")
     suspend fun getRecentReview(
-        @Header("Authorization") authorization: String,
         @Query("sort") sort: String = "recent"
     ): ResponseGetRecentReviewDto
 
     @GET("/api/books/{bookId}/reviews")
     suspend fun getBookReviews(
-        @Header("Authorization") authorization: String,
         @Path("bookId") bookId: Long,
         @Query("page") page: Int = 1,
         @Query("size") size: Int = 10
@@ -43,25 +39,21 @@ interface ReviewApiService {
 
     @GET("/api/reviews/{reviewId}")
     suspend fun getReviewDetail(
-        @Header("Authorization") authorization: String,
         @Path("reviewId") reviewId: Long
     ): ResponseGetReviewDetailDto
 
     @POST("/api/reviews/{reviewId}/like")
     suspend fun addReviewLike(
-        @Header("Authorization") authorization: String,
         @Path("reviewId") reviewId: Long
     ): ResponseReviewLikeDto
 
     @DELETE("/api/reviews/{reviewId}/like")
     suspend fun removeReviewLike(
-        @Header("Authorization") authorization: String,
         @Path("reviewId") reviewId: Long
     ): ResponseReviewLikeDto
 
     @GET("/api/reviews/{reviewId}/comments")
     suspend fun getReviewComments(
-        @Header("Authorization") authorization: String,
         @Path("reviewId") reviewId: Long,
         @Query("page") page: Int = 1,
         @Query("size") size: Int = 10
@@ -69,14 +61,12 @@ interface ReviewApiService {
 
     @POST("/api/books/{bookId}/reviews")
     suspend fun createReview(
-        @Header("Authorization") authorization: String,
         @Path("bookId") bookId: Long,
         @Body request: RequestCreateReviewDto
     ): ResponseCreateReviewDto
 
     @POST("/api/reviews/{reviewId}/comments")
     suspend fun createReviewComment(
-        @Header("Authorization") token: String,
         @Path("reviewId") reviewId: Long,
         @Body request: RequestCreateCommentDto
     ): ResponsePostCreateCommentDto

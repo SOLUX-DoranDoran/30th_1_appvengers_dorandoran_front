@@ -1,6 +1,5 @@
 package com.solux.dorandoran.data.repositoryimpl
 
-import android.content.Context
 import com.solux.dorandoran.data.datasource.ReviewDataSource
 import com.solux.dorandoran.data.dto.request.RequestCreateCommentDto
 import com.solux.dorandoran.data.dto.request.RequestCreateReviewDto
@@ -17,29 +16,20 @@ import com.solux.dorandoran.domain.entity.ReviewDetailEntity
 import com.solux.dorandoran.domain.entity.ReviewLikeResponseEntity
 import com.solux.dorandoran.domain.entity.ReviewListEntity
 import com.solux.dorandoran.domain.repository.ReviewRepository
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import com.solux.dorandoran.domain.entity.ReviewEntity
 import com.solux.dorandoran.data.mapper.toReviewEntity
 
 class ReviewRepositoryImpl @Inject constructor(
     private val reviewDataSource: ReviewDataSource,
-    @ApplicationContext private val context: Context
 ) : ReviewRepository {
-
-    private suspend fun getAccessToken(): String {
-        return "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTA0NDM0Nzk3NDYyMjYwOTcxMjIiLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzU0OTk5OTUyfQ.WvghkrfFxUIWnQjwVS8OJHx_LQrnnxldh9A7nUG26is"
-    }
-
     override suspend fun getRecentReviews(
         sort: String,
         page: Int,
         size: Int
     ): Result<List<ReviewListEntity>> {
         return runCatching {
-            val token = getAccessToken()
             val response = reviewDataSource.getRecentReviews(
-                token = token,
                 sort = sort,
                 page = page,
                 size = size
@@ -52,9 +42,7 @@ class ReviewRepositoryImpl @Inject constructor(
         sort: String
     ): Result<ReviewEntity?> {
         return runCatching {
-            val token = getAccessToken()
             val response = reviewDataSource.getRecentReview(
-                token = token,
                 sort = sort,
                 page = 1,
                 size = 1
@@ -69,9 +57,7 @@ class ReviewRepositoryImpl @Inject constructor(
         size: Int
     ): Result<BookReviewsResponseEntity> {
         return runCatching {
-            val token = getAccessToken()
             val response = reviewDataSource.getBookReviews(
-                token = token,
                 bookId = bookId,
                 page = page,
                 size = size
@@ -84,9 +70,7 @@ class ReviewRepositoryImpl @Inject constructor(
         reviewId: Long
     ): Result<ReviewDetailEntity> {
         return runCatching {
-            val token = getAccessToken()
             val response = reviewDataSource.getReviewDetail(
-                token = token,
                 reviewId = reviewId
             )
             response.toReviewDetailEntity()
@@ -97,17 +81,14 @@ class ReviewRepositoryImpl @Inject constructor(
         reviewId: Long
     ): Result<ReviewLikeResponseEntity> {
         return runCatching {
-            val token = getAccessToken()
 
             try {
                 val response = reviewDataSource.addReviewLike(
-                    token = token,
                     reviewId = reviewId
                 )
                 response.toReviewLikeResponseEntity()
             } catch (e: Exception) {
                 val response = reviewDataSource.removeReviewLike(
-                    token = token,
                     reviewId = reviewId
                 )
                 response.toReviewLikeResponseEntity()
@@ -121,9 +102,7 @@ class ReviewRepositoryImpl @Inject constructor(
         size: Int
     ): Result<ReviewCommentsResponseEntity> {
         return runCatching {
-            val token = getAccessToken()
             val response = reviewDataSource.getReviewComments(
-                token = token,
                 reviewId = reviewId,
                 page = page,
                 size = size
@@ -138,13 +117,11 @@ class ReviewRepositoryImpl @Inject constructor(
         rating: Int
     ): Result<ReviewCreateResponseEntity> {
         return runCatching {
-            val token = getAccessToken()
             val request = RequestCreateReviewDto(
                 content = content,
                 rating = rating
             )
             val response = reviewDataSource.createReview(
-                token = token,
                 bookId = bookId,
                 request = request
             )
@@ -160,10 +137,8 @@ class ReviewRepositoryImpl @Inject constructor(
         content: String
     ): Result<CommentCreateResponseEntity> {
         return runCatching {
-            val token = getAccessToken()
             val request = RequestCreateCommentDto(content = content)
             val response = reviewDataSource.createReviewComment(
-                token = token,
                 reviewId = reviewId,
                 request = request
             )

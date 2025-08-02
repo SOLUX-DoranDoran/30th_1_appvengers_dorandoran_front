@@ -12,44 +12,36 @@ class QuoteDataSourceImpl @Inject constructor(
     private val quoteApiService: QuoteApiService
 ) : QuoteDataSource {
     override suspend fun postQuote(
-        token: String,
         request: RequestPostQuoteDto
     ): ResponsePostQuoteDto {
-        return quoteApiService.postQuote(token, request)
+        return quoteApiService.postQuote(request)
     }
 
     override suspend fun getQuotes(
-        token: String,
         sort: String,
         page: Int,
         size: Int
     ): List<ResponseGetQuoteDto> {
-        return quoteApiService.getQuotes(token, sort, page, size)
+        return quoteApiService.getQuotes(sort, page, size)
     }
 
-    override suspend fun getRecentQuote(
-        token: String
-    ): List<ResponseGetQuoteDto> {
-        return quoteApiService.getRecentQuote(token)
+    override suspend fun getRecentQuote(): List<ResponseGetQuoteDto> {
+        return quoteApiService.getRecentQuote()
     }
 
     // 수정: 좋아요 기능 추가 (Review 방식과 동일)
     override suspend fun addQuoteLike(
-        token: String,
         quoteId: Long
     ): ResponseQuoteLikeDto {
         return quoteApiService.addQuoteLike(
-            authorization = "Bearer $token",
             quoteId = quoteId
         )
     }
 
     override suspend fun removeQuoteLike(
-        token: String,
         quoteId: Long
     ): ResponseQuoteLikeDto {
         return quoteApiService.removeQuoteLike(
-            authorization = "Bearer $token",
             quoteId = quoteId
         )
     }
