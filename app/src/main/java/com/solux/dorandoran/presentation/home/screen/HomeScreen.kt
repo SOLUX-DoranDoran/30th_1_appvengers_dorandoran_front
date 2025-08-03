@@ -99,7 +99,7 @@ fun HomeScreen(
                     HotDiscussionsSection(
                         discussion = discussion,
                         onDiscussionClick = { discussionId ->
-                            navigator.navigateToDiscussing()
+                            navigator.navigateToDiscussing(discussionId)
                         },
                         onMoreClick = {
                             navigator.navigateToDiscussDetail()

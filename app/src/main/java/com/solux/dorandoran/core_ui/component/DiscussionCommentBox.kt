@@ -51,6 +51,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import com.solux.dorandoran.R
 import com.solux.dorandoran.core_ui.theme.Background03
@@ -245,7 +246,7 @@ fun DiscussionCommentBox(
                 contentColor = Color.White
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_discussionscreen_chatbubble),
+                    painter = painterResource(id = R.drawable.ic_discussionscreen_chatbubble), // 수정: vectorResource → painterResource
                     contentDescription = "댓글 추가",
                     modifier = Modifier.size(20.dp),
                     tint = Background01

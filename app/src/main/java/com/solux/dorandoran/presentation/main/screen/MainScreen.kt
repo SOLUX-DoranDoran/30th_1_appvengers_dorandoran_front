@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -34,6 +35,7 @@ import com.solux.dorandoran.presentation.discuss.navigation.DiscussNavHost
 import com.solux.dorandoran.presentation.home.navigation.HomeNavigator
 import com.solux.dorandoran.presentation.home.screen.HomeRoute
 import com.solux.dorandoran.presentation.main.navigation.MainNavigator
+import com.solux.dorandoran.presentation.main.util.TabManager
 import com.solux.dorandoran.presentation.mypage.navigation.MypageNavigator
 import com.solux.dorandoran.presentation.mypage.screen.MypageRoute
 import com.solux.dorandoran.presentation.review.navigation.ReviewNavigator
@@ -54,6 +56,13 @@ fun MainScreen(
     navController: NavHostController,
 ) {
     var selectedItem by rememberSaveable { mutableIntStateOf(0) }
+
+    LaunchedEffect(Unit) {
+        TabManager.setTabChangeCallback { tabIndex ->
+            selectedItem = tabIndex
+        }
+    }
+
     val items = listOf(
         BottomNavigationItem(
             selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_homescreen_clicked),
@@ -120,7 +129,6 @@ fun MainScreen(
                 }
                 1 -> {
                     DiscussNavHost()
-
                 }
                 2 -> {
                     RecentReviewRoute(
@@ -132,7 +140,6 @@ fun MainScreen(
                 }
             }
         }
-
     }
 }
 

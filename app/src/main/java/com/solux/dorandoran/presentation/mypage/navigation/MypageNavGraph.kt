@@ -22,7 +22,8 @@ fun NavGraphBuilder.mypageNavGraph(
         EmotionShareNewRoute(navigator = navigator)
     }
 
-    composable(route = "recent_review") {
-        RecentReviewRoute(navigator = navigator)
-    }
+    // TODO: 사용자가 입력한 리뷰 목록으로 이동
+//    composable(route = "recent_review") {
+//        RecentReviewRoute(navigator = navigator)
+//    }
 }
