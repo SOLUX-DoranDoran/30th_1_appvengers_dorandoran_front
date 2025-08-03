@@ -9,17 +9,16 @@ class UserDataSourceImpl @Inject constructor(
     private val userApiService: UserApiService
 ) : UserDataSource {
 
-    override suspend fun getUserInfo(token: String): ResponseGetUserDto {
-        return userApiService.getUserInfo("Bearer $token")
+    // 수정: AuthInterceptor에서 자동으로 토큰 추가하므로 토큰 파라미터 제거
+    override suspend fun getUserInfo(): ResponseGetUserDto {
+        return userApiService.getUserInfo()
     }
 
     override suspend fun updateUserProfile(
-        token: String,
         nickname: String,
         profileImage: String?
     ): ResponseGetUserDto {
         return userApiService.updateUserProfile(
-            authorization = "Bearer $token",
             nickname = nickname,
             profileImage = profileImage
         )

@@ -13,15 +13,9 @@ class UserRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : UserRepository {
 
-    private suspend fun getAccessToken(): String {
-        // 수정: 실제 토큰 관리 로직으로 대체 필요
-        return "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTA0NDM0Nzk3NDYyMjYwOTcxMjIiLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzU0OTk5OTUyfQ.WvghkrfFxUIWnQjwVS8OJHx_LQrnnxldh9A7nUG26is"
-    }
-
     override suspend fun getUserInfo(): Result<UserEntity> {
         return runCatching {
-            val token = getAccessToken()
-            val response = userDataSource.getUserInfo(token)
+            val response = userDataSource.getUserInfo()
             response.toUserEntity()
         }
     }
@@ -31,8 +25,7 @@ class UserRepositoryImpl @Inject constructor(
         profileImage: String?
     ): Result<UserEntity> {
         return runCatching {
-            val token = getAccessToken()
-            val response = userDataSource.updateUserProfile(token, nickname, profileImage)
+            val response = userDataSource.updateUserProfile(nickname, profileImage)
             response.toUserEntity()
         }
     }

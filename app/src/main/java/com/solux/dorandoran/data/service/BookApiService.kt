@@ -10,4 +10,9 @@ interface BookApiService {
         @Path("bookId") bookId: Long
     ): ResponseGetBookDto
 
+    // 도서 정보 조회
+    @GET("/api/books/{bookId}")
+    suspend fun getBookDetail(
+        @Path("bookId") bookId: Int
+    ): ResponseGetBookDto
 }

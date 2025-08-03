@@ -21,7 +21,7 @@ class HomeNavigator(
     }
 
     // 토론 중 화면으로 이동
-    fun navigateToDiscussing(discussionId: Long = 1) {
+    fun navigateToDiscussing(discussionId: Long) {
         navController.navigate("discussionRoom/$discussionId") //수정: discussionRoom으로 이동, 기본값 1
     }
 

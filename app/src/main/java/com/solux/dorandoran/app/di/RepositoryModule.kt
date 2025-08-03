@@ -1,5 +1,6 @@
 package com.solux.dorandoran.app.di
 
+import com.solux.dorandoran.data.repositoryimpl.BoardRepositoryImpl
 import com.solux.dorandoran.data.repositoryimpl.BookRepositoryImpl
 import com.solux.dorandoran.data.repositoryimpl.DiscussCommentRepositoryImpl
 import com.solux.dorandoran.data.repositoryimpl.DiscussRepositoryImpl
@@ -9,6 +10,7 @@ import com.solux.dorandoran.data.repositoryimpl.QuoteRepositoryImpl
 import com.solux.dorandoran.data.repositoryimpl.RecommendedBookRepositoryImpl
 import com.solux.dorandoran.data.repositoryimpl.ReviewRepositoryImpl
 import com.solux.dorandoran.data.repositoryimpl.UserRepositoryImpl
+import com.solux.dorandoran.domain.repository.BoardRepository
 import com.solux.dorandoran.domain.repository.BookRepository
 import com.solux.dorandoran.domain.repository.DiscussCommentRepository
 import com.solux.dorandoran.domain.repository.DiscussRepository
@@ -63,6 +65,10 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindDiscussionRepository(discussionRepositoryImpl: DiscussionRepositoryImpl): DiscussionRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindBoardRepository(boardRepositoryImpl: BoardRepositoryImpl): BoardRepository
 
     @Binds
     @Singleton
