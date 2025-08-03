@@ -20,9 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.solux.dorandoran.R
+import com.solux.dorandoran.core_ui.theme.Background01
 import com.solux.dorandoran.core_ui.theme.Button02
 import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.baseBold
@@ -54,10 +56,10 @@ fun DiscussionTopicBox(
         ) {
 
             Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_discussionscreen_chatbubble),
-            contentDescription = "댓글 추가",
-            modifier = Modifier.size(20.dp),
-                tint = Button02
+                painter = painterResource(id = R.drawable.ic_discussionscreen_chatbubble), // 수정: vectorResource → painterResource
+                contentDescription = "댓글 추가",
+                modifier = Modifier.size(20.dp),
+                tint = Background01
             )
 
             Spacer(modifier = Modifier.height(15.dp))

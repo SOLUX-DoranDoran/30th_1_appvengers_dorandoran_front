@@ -1,5 +1,6 @@
 package com.solux.dorandoran.presentation.discuss.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,6 +37,8 @@ import com.solux.dorandoran.domain.entity.DiscussCommentEntity
 import com.solux.dorandoran.domain.entity.DiscussPageEntity
 import com.solux.dorandoran.presentation.discuss.viewmodel.DiscussCommentViewModel // 수정: DiscussCommentViewModel import 추가
 import com.solux.dorandoran.presentation.discuss.viewmodel.DiscussViewModel
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 
 @Composable
 fun DiscussionRoomRoute(
@@ -44,25 +47,53 @@ fun DiscussionRoomRoute(
     viewModel: DiscussViewModel = hiltViewModel(),
     discussCommentViewModel: DiscussCommentViewModel = hiltViewModel() // 수정: 댓글 ViewModel 추가
 ) {
+    var showAddDiscussionScreen by remember { mutableStateOf(false) }
+
     val selectedDiscussion = viewModel.getDiscussionById(discussionId)
+
     if (selectedDiscussion != null) {
         val book = viewModel.getBookInfoByBookId(selectedDiscussion.bookId)
         val bookDiscussions = viewModel.getDiscussionsForBook(selectedDiscussion.bookTitle)
 
-        book?.let { bookInfo ->
-            DiscussionRoomScreen(
-                selectedBook = selectedDiscussion,
-                book = book,
-                discussionsForBook = bookDiscussions,
-                discussCommentViewModel = discussCommentViewModel, // 수정: 파라미터 연결
-                onBackClick = { navigator.navigateUp() },
-                onAddClick = {},
-                onDiscussionClick = { clickedDiscussionId ->
-                    navigator.navigateToDiscussionTopic(clickedDiscussionId, 0)
+
+        //수정: 조건부 렌더링으로 AddDiscussionScreen과 DiscussionRoomScreen 전환
+        if (showAddDiscussionScreen && book != null) {
+            AddDiscussionScreen(
+                viewModel = viewModel,
+                bookId = book.id.toInt(),
+                onBackClick = {
+                    showAddDiscussionScreen = false //수정: AddDiscussion 화면 닫기
+                },
+                onDiscussionCreated = {
+                    showAddDiscussionScreen = false //수정: 토론 생성 완료 후 화면 닫기
+                    viewModel.refreshDiscussions() //수정: 토론 목록 새로고침
                 }
             )
+        } else {
+            book?.let { bookInfo ->
+                DiscussionRoomScreen(
+                    selectedBook = selectedDiscussion,
+                    book = book,
+                    discussionsForBook = bookDiscussions,
+                    discussCommentViewModel = discussCommentViewModel,
+                    onBackClick = {
+                        navigator.navigateUp()
+                    },
+                    onAddClick = {
+                        showAddDiscussionScreen = true //수정: AddDiscussion 화면 표시
+                    },
+                    onDiscussionClick = { clickedDiscussionId ->
+                        try {
+                            navigator.navigateToDiscussionTopic(clickedDiscussionId, 0)
+                        } catch (e: Exception) {
+                            Log.e("DiscussionRoomRoute", "❌ Navigation failed: ${e.message}", e)
+                        }
+                    }
+                )
+            }
         }
     } else {
+        Log.e("DiscussionRoomRoute", "❌ selectedDiscussion is NULL for discussionId: $discussionId")
         Text("선택된 책을 찾을 수 없습니다")
     }
 }
@@ -78,6 +109,10 @@ fun DiscussionRoomScreen(
     onAddClick: () -> Unit = {},
     onDiscussionClick: (Int) -> Unit = {}
 ) {
+    discussionsForBook.forEachIndexed { index, discussion ->
+        Log.d("DiscussionRoom", "📋 Discussion[$index]: boardId=${discussion.boardId}, title=${discussion.bookTitle}")
+    }
+
     // 수정: 개설자 의견을 동적으로 생성하는 대신 고정된 더미 데이터 사용
     val authorArgument = DiscussCommentEntity(
         id = 999,
@@ -155,8 +190,8 @@ fun DiscussionRoomScreen(
                 DiscussionRoomBox(
                     discussion = discussion,
                     onClick = {
-                        println("Box Clicked")
-                        onDiscussionClick(discussion.boardId) },
+                        onDiscussionClick(discussion.boardId)
+                    },
                     modifier = Modifier
                         .padding(15.dp),
                     argument = authorArgument

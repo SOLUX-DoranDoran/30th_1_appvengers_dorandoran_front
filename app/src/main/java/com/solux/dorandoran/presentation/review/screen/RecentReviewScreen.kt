@@ -37,7 +37,6 @@ import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.baseRegular
 import com.solux.dorandoran.domain.entity.ReviewDetailEntity
 import com.solux.dorandoran.domain.entity.ReviewListEntity
-import com.solux.dorandoran.presentation.mypage.navigation.MypageNavigator
 import com.solux.dorandoran.presentation.review.navigation.ReviewNavigator
 import com.solux.dorandoran.presentation.review.viewmodel.RecentReviewViewModel
 import java.time.LocalDateTime
@@ -45,7 +44,7 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun RecentReviewRoute(
-    navigator: MypageNavigator,
+    navigator: ReviewNavigator,
     viewModel: RecentReviewViewModel = hiltViewModel()
 ) {
     RecentReviewScreen(
@@ -69,7 +68,15 @@ fun RecentReviewScreen(
             .background(Background02)
     ) {
         RecentReviewHeader(
-            onBackClick = { navigator.navigateToHome() }
+            // 수정: 직접 main 화면으로 이동하면서 백스택 정리
+            onBackClick = {
+                navigator.navController.navigate("main") {
+                    // 현재 화면을 백스택에서 제거
+                    popUpTo("recent_review") { inclusive = true }
+                    // 중복 인스턴스 방지
+                    launchSingleTop = true
+                }
+            }
         )
 
         when {

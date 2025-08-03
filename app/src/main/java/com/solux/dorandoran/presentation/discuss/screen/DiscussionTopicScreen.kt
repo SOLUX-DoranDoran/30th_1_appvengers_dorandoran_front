@@ -1,5 +1,6 @@
 package com.solux.dorandoran.presentation.discuss.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.layout.size
@@ -44,6 +45,7 @@ fun DiscussionTopicRoute(
     viewModel: DiscussViewModel = hiltViewModel(),
     discussCommentViewModel: DiscussCommentViewModel = hiltViewModel() // 수정: 댓글 ViewModel 추가
 ) {
+
     val discussion = viewModel.getDiscussionById(discussionId)
 
     if (discussion != null) {
@@ -51,10 +53,13 @@ fun DiscussionTopicRoute(
             discussion = discussion,
             viewModel = viewModel, // 수정: 메인 ViewModel 전달
             discussCommentViewModel = discussCommentViewModel, // 수정: 댓글 ViewModel 전달
-            onBackClick = { navigator.navigateUp() },
+            onBackClick = {
+                navigator.navigateUp()
+            },
             onItemClick = { /* 필요시 구현 */ }
         )
     } else {
+        Log.e("DiscussionTopicRoute", "❌ Discussion not found for discussionId: $discussionId")
         Text("토론을 찾을 수 없습니다")
     }
 }
@@ -66,7 +71,7 @@ fun DiscussionTopicScreen(
     onBackClick: () -> Unit = {},
     viewModel: DiscussViewModel = hiltViewModel(), // 수정: 메인 ViewModel 추가
     discussCommentViewModel: DiscussCommentViewModel = hiltViewModel(), // 수정: 기본값 추가
-    onItemClick: (DiscussPageEntity) -> Unit
+    onItemClick: (DiscussPageEntity) -> Unit = {}
 ) {
     // 수정: 댓글 관련 상태들을 ViewModel에서 가져오기
     val commentInputMap by discussCommentViewModel.activeCommentInputMap
@@ -121,11 +126,10 @@ fun DiscussionTopicScreen(
                 onInputChange = { argumentText = it },
                 modifier = Modifier.padding(8.dp),
                 onSubmit = {
-                    // 수정: 실제 댓글 작성 로직 연결
                     if (argumentText.isNotBlank()) {
-                        discussCommentViewModel.createComment(discussion.boardId)
-                        discussCommentViewModel.updateCommentInput(argumentText)
-                        argumentText = ""
+                        discussCommentViewModel.updateCommentInput(argumentText) //수정: 먼저 입력값 설정
+                        discussCommentViewModel.createComment(discussion.boardId) //수정: 그 다음 댓글 생성
+                        argumentText = "" //수정: 입력 필드 초기화
                     }
                 }
             )

@@ -1,6 +1,7 @@
 package com.solux.dorandoran.presentation.review.navigation
 
 import androidx.navigation.NavController
+import com.solux.dorandoran.presentation.main.util.TabManager
 
 class ReviewNavigator(
     val navController: NavController
@@ -13,7 +14,15 @@ class ReviewNavigator(
         navController.navigate("recent_review")
     }
 
-    fun navigateToHome() {
-        navController.navigate("home")
+    fun navigateToHomeTab() {
+        TabManager.changeTab(TabManager.HOME_TAB)
+    }
+
+    fun navigateBackSafely() {
+        if (navController.previousBackStackEntry != null) {
+            navController.popBackStack()
+        } else {
+            navigateToHomeTab()
+        }
     }
 }
