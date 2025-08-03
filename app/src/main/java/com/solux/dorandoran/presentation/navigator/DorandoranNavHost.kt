@@ -43,16 +43,8 @@ fun DoranDoranNavHost(
     ) {
         NavHost(
             navController = navController,
-            startDestination = "main",
+            startDestination = startDestination,
         ) {
-            composable("main") {
-                MainRoute(navigator = MainNavigator(navController))
-            }
-
-            // 각 모듈의 네비게이션 그래프 추가
-            mypageNavGraph(MypageNavigator(navController))
-            reviewNavGraph(ReviewNavigator(navController))
-
             composable("signin") {
                 SignInRoute(authNavigator)
             }

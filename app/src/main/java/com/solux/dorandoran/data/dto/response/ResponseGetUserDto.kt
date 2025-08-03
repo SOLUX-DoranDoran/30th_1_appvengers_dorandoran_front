@@ -8,6 +8,5 @@ data class ResponseGetUserDto(
     @SerialName("id") val id: Long,
     @SerialName("email") val email: String,
     @SerialName("nickname") val nickname: String,
-    @SerialName("profileImage") val profileImage: String?,
-    @SerialName("createdAt") val createdAt: String
+    @SerialName("profileImage") val profileImage: String?
 )

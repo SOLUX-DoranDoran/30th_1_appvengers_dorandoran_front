@@ -51,24 +51,24 @@ import com.solux.dorandoran.presentation.discuss.viewmodel.BoardViewModel // 수
 fun DiscussionRoomRoute(
     navigator: DiscussNavigator,
     discussionId: Int,
-    boardViewModel: BoardViewModel = hiltViewModel()
+    boardViewModel: BoardViewModel = hiltViewModel() // 수정: BoardViewModel 사용
 ) {
     var showAddDiscussionScreen by remember { mutableStateOf(false) }
 
-    // BoardViewModel에서 상태들 가져오기
+    // 수정: BoardViewModel에서 상태들 가져오기
     val selectedBoard by boardViewModel.selectedBoard
     val selectedBook by boardViewModel.selectedBook
     val bookBoards by boardViewModel.bookBoards
     val isLoading by boardViewModel.isLoading
     val errorMessage by boardViewModel.errorMessage
 
-    // 토론 상세 정보 및 도서별 토론 목록 로드
+    // 수정: 토론 상세 정보 및 도서별 토론 목록 로드
     LaunchedEffect(discussionId) {
         Log.d("DiscussionRoomRoute", "토론 정보 로드: $discussionId")
         boardViewModel.loadBoardDetail(discussionId)
     }
 
-    // 도서 정보가 로드되면 해당 도서의 토론 목록도 로드
+    // 수정: 도서 정보가 로드되면 해당 도서의 토론 목록도 로드
     LaunchedEffect(selectedBoard?.bookId) {
         selectedBoard?.let { board ->
             Log.d("DiscussionRoomRoute", "도서별 토론 목록 로드: ${board.bookId}")
@@ -76,8 +76,43 @@ fun DiscussionRoomRoute(
         }
     }
 
+    // 수정: CreateDiscussionScreen의 생성 완료를 감지하기 위한 변수
+    var previousCreateBoardTitle by remember { mutableStateOf("") }
+    var previousCreateBoardContent by remember { mutableStateOf("") }
+    var previousCreateBoardBookTitle by remember { mutableStateOf("") }
+
+    // 수정: 토론 생성 완료 감지 및 화면 닫기
+    LaunchedEffect(
+        boardViewModel.createBoardTitle.value,
+        boardViewModel.createBoardContent.value,
+        boardViewModel.createBoardBookTitle.value,
+        boardViewModel.isLoading.value
+    ) {
+        // 이전에 값이 있었는데 현재 모두 비어있고 로딩이 끝났다면 생성 완료
+        if (previousCreateBoardTitle.isNotEmpty() &&
+            previousCreateBoardContent.isNotEmpty() &&
+            previousCreateBoardBookTitle.isNotEmpty() &&
+            boardViewModel.createBoardTitle.value.isEmpty() &&
+            boardViewModel.createBoardContent.value.isEmpty() &&
+            boardViewModel.createBoardBookTitle.value.isEmpty() &&
+            !boardViewModel.isLoading.value &&
+            showAddDiscussionScreen) {
+
+            Log.d("DiscussionRoomRoute", "토론 생성 완료 감지, 화면 닫기")
+            showAddDiscussionScreen = false
+            selectedBoard?.let { board ->
+                boardViewModel.loadBookBoards(board.bookId) // 토론 목록 새로고침
+            }
+        }
+
+        // 현재 값들을 저장
+        previousCreateBoardTitle = boardViewModel.createBoardTitle.value
+        previousCreateBoardContent = boardViewModel.createBoardContent.value
+        previousCreateBoardBookTitle = boardViewModel.createBoardBookTitle.value
+    }
+
     when {
-        isLoading && !showAddDiscussionScreen -> {
+        isLoading -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -86,7 +121,7 @@ fun DiscussionRoomRoute(
             }
         }
 
-        errorMessage != null && !showAddDiscussionScreen -> {
+        errorMessage != null -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -96,36 +131,24 @@ fun DiscussionRoomRoute(
         }
 
         selectedBoard != null && selectedBook != null -> {
+            // 수정: 조건부 렌더링으로 CreateDiscussionScreen과 DiscussionRoomScreen 전환
             if (showAddDiscussionScreen) {
                 CreateDiscussionScreen(
-                    navigator = navigator,
-                    viewModel = boardViewModel,
-                    onCreateSuccess = {
-                        Log.d("DiscussionRoomRoute", "토론 생성 성공")
-                        showAddDiscussionScreen = false
-                        // 토론 목록 새로고침
-                        selectedBoard?.let { board ->
-                            boardViewModel.loadBookBoards(board.bookId)
-                        }
-                    },
-                    onBackPressed = {
-                        Log.d("DiscussionRoomRoute", "토론 생성 화면에서 뒤로가기")
-                        showAddDiscussionScreen = false
-                    }
+                    navigator = navigator, // 수정: navigator 파라미터 추가
+                    viewModel = boardViewModel // 수정: BoardViewModel 사용
                 )
             } else {
                 DiscussionRoomScreen(
                     selectedBoard = selectedBoard!!,
                     book = selectedBook!!,
-                    discussionsForBook = bookBoards,
+                    discussionsForBook = bookBoards, // 수정: BoardViewModel의 bookBoards 사용
                     onBackClick = {
                         navigator.navigateUp()
                     },
                     onAddClick = {
-                        Log.d("DiscussionRoomRoute", "토론 개설 버튼 클릭")
-                        showAddDiscussionScreen = true
+                        showAddDiscussionScreen = true // AddDiscussion 화면 표시
                     },
-                    onDiscussionClick = { clickedDiscussionId: Int ->
+                    onDiscussionClick = { clickedDiscussionId: Int -> // 수정: 타입 명시
                         try {
                             navigator.navigateToDiscussionTopic(clickedDiscussionId, 0)
                         } catch (e: Exception) {
