@@ -4,10 +4,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AddArgumentResponseGetDto (
+data class ResponseCreateDiscussCommentDto(
     @SerialName("id") val id: Int,
-    @SerialName("memberNickname") val memberNickname: String,
     @SerialName("content") val content: String,
     @SerialName("createdAt") val createdAt: String,
+    @SerialName("memberNickname") val memberNickname: String,
     @SerialName("parentId") val parentId: Int?
 )

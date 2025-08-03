@@ -53,11 +53,12 @@ import com.solux.dorandoran.R
 fun MypageRoute(
     navigator: MypageNavigator
 ) {
-    MypageScreen()
+    MypageScreen(navigator = navigator)
 }
 
 @Composable
 fun MypageScreen(
+    navigator: MypageNavigator,
     nickname: String = "송이" // 액세스 토큰으로 받아온 사용자 닉네임
 ) {
     val tabTitles = listOf("내 리뷰 보기", "내 감성글귀 보기")
@@ -146,7 +147,14 @@ fun MypageScreen(
             DiscussionTabHeader(
                 tabTitles = tabTitles,
                 selectedTabIndex = selectedTabIndex,
-                onTabSelected = { selectedTabIndex = it }
+                onTabSelected = { index ->
+                    selectedTabIndex = index
+                    // 탭 클릭 시 네비게이션
+                    when (index) {
+                        0 -> navigator.navigateToRecentReview()
+                        1 -> navigator.navigateToEmotionShare()
+                    }
+                }
             )
             // 임시 탭
             when (selectedTabIndex) {
@@ -161,7 +169,6 @@ fun MypageScreen(
         }
     }
 }
-
 
 @Composable
 fun DiscussionTabHeader(

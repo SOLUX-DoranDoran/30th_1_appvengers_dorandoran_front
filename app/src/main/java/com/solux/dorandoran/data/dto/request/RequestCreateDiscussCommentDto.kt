@@ -4,8 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AddDiscussionRequestDto (
-    @SerialName("title") val title: String,
+data class RequestCreateDiscussCommentDto(
     @SerialName("content") val content: String,
-    @SerialName("bookTitle") val bookTitle: String
+    @SerialName("parentId") val parentId: Int? = null // null이면 원댓글, 값이 있으면 대댓글
 )

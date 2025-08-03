@@ -1,43 +1,30 @@
 package com.solux.dorandoran.data.service
 
-import com.solux.dorandoran.data.dto.request.DiscussionListRequestDto
-import com.solux.dorandoran.data.dto.request.AddDiscussionRequestDto
-import com.solux.dorandoran.data.dto.response.DiscussionListResponseGetDto
-import com.solux.dorandoran.data.dto.response.DiscussDetailResponseGetDto
-import com.solux.dorandoran.data.dto.response.BookDiscussionListResponseGetDto
-import com.solux.dorandoran.data.dto.response.AddDiscussionResponseGetDto
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
+import com.solux.dorandoran.data.dto.request.RequestCreateDiscussionDto
+import com.solux.dorandoran.data.dto.response.ResponseCreateDiscussionDto
+import com.solux.dorandoran.data.dto.response.ResponseGetDiscussionItemDto
+import com.solux.dorandoran.data.dto.response.ResponseGetDiscussionsDto
+import retrofit2.http.*
 
 interface DiscussApiService {
 
-    @GET("/api/boards?page=1&size=10")
+    @GET("/api/discussions")
     suspend fun getDiscussions(
         @Header("Authorization") authorization: String,
-        @Query("page") page: Int = 1,
-        @Query("size") size: Int = 10
-    ): List<DiscussionListResponseGetDto>
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 10,
+        @Query("sort") sort: String = "createdAt,desc"
+    ): ResponseGetDiscussionsDto
 
-    @GET("/api/books/{bookId}/board")
-    suspend fun getDiscussionsForBook(
-        @Header("Authorization") token: String,
-        @Path("bookId") bookId: Int
-    ): BookDiscussionListResponseGetDto
-
-    @POST("/api/boards")
+    @POST("/api/discussions")
     suspend fun createDiscussion(
-        @Header("Authorization") token: String,
-        @Body request: AddDiscussionRequestDto
-    ): AddDiscussionResponseGetDto
+        @Header("Authorization") authorization: String,
+        @Body request: RequestCreateDiscussionDto
+    ): ResponseCreateDiscussionDto
 
-    @GET("/api/boards/{boardId}")
-    suspend fun getDiscussionDetails(
-        @Header("Authorization") token: String,
-        @Path("boardId") boardId: Int
-    ) : List<DiscussDetailResponseGetDto>
+    @GET("/api/discussions/{discussionId}")
+    suspend fun getDiscussionDetail(
+        @Header("Authorization") authorization: String,
+        @Path("discussionId") discussionId: Int
+    ): ResponseGetDiscussionItemDto
 }

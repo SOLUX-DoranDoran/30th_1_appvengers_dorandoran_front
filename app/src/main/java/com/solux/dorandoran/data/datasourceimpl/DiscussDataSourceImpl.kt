@@ -1,48 +1,52 @@
 package com.solux.dorandoran.data.datasourceimpl
 
 import com.solux.dorandoran.data.datasource.DiscussDataSource
-import com.solux.dorandoran.data.dto.request.AddDiscussionRequestDto
-import com.solux.dorandoran.data.dto.response.AddDiscussionResponseGetDto
-import com.solux.dorandoran.data.dto.response.BookDiscussionListResponseGetDto
-import com.solux.dorandoran.data.dto.response.DiscussDetailResponseGetDto
-import com.solux.dorandoran.data.dto.response.DiscussionListResponseGetDto
+import com.solux.dorandoran.data.dto.request.RequestCreateDiscussionDto
+import com.solux.dorandoran.data.dto.response.ResponseCreateDiscussionDto
+import com.solux.dorandoran.data.dto.response.ResponseGetDiscussionItemDto
+import com.solux.dorandoran.data.dto.response.ResponseGetDiscussionsDto
 import com.solux.dorandoran.data.service.DiscussApiService
-import retrofit2.Response
 import javax.inject.Inject
 
 class DiscussDataSourceImpl @Inject constructor(
     private val discussApiService: DiscussApiService
 ) : DiscussDataSource {
+
     override suspend fun getDiscussions(
         token: String,
         page: Int,
         size: Int
-    ): List<DiscussionListResponseGetDto> {
-        return discussApiService.getDiscussions(token, page, size)
-    }
-
-    override suspend fun getDiscussionsForBook(
-        token: String,
-        bookId: Int
-    ): BookDiscussionListResponseGetDto {
-        return discussApiService.getDiscussionsForBook(token, bookId)
+    ): ResponseGetDiscussionsDto {
+        return discussApiService.getDiscussions(
+            authorization = "Bearer $token",
+            page = page,
+            size = size
+        )
     }
 
     override suspend fun createDiscussion(
         token: String,
+        bookId: String,
         title: String,
-        content: String,
-        bookTitle: String
-    ): AddDiscussionResponseGetDto {
-        return discussApiService.createDiscussion(token, request = AddDiscussionRequestDto(title, content, bookTitle))
+        content: String
+    ): ResponseCreateDiscussionDto {
+        return discussApiService.createDiscussion(
+            authorization = "Bearer $token",
+            request = RequestCreateDiscussionDto(
+                bookId = bookId,
+                title = title,
+                content = content
+            )
+        )
     }
 
-    override suspend fun getDiscussionDetails(
+    override suspend fun getDiscussionDetail(
         token: String,
-        boardId: Int
-    ): List<DiscussDetailResponseGetDto> {
-        return discussApiService.getDiscussionDetails(token, boardId)
+        discussionId: Int
+    ): ResponseGetDiscussionItemDto {
+        return discussApiService.getDiscussionDetail(
+            authorization = "Bearer $token",
+            discussionId = discussionId
+        )
     }
-
-
 }

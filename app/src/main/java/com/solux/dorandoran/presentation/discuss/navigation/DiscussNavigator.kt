@@ -7,19 +7,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 class DiscussNavigator(
-    val navController: NavHostController
+    val navController: NavController
 ){
 
     fun navigateToDiscussionRoom(discussionId: Int) {
-        val route = "discussionRoom/$discussionId"
-        println("🚀 Navigate to room: $route")
-        try {
-            navController.navigate(route)
-            println("✅ Room navigation successful")
-        } catch (e: Exception) {
-            println("❌ Room navigation failed: ${e.message}")
-            e.printStackTrace()
-        }
+        navController.navigate("discussion_room/$discussionId")
     }
 
     fun navigateUp() {

@@ -34,15 +34,15 @@ import com.solux.dorandoran.core_ui.theme.largeBold
 import com.solux.dorandoran.domain.entity.BookEntity
 import com.solux.dorandoran.domain.entity.DiscussCommentEntity
 import com.solux.dorandoran.domain.entity.DiscussPageEntity
+import com.solux.dorandoran.presentation.discuss.viewmodel.DiscussCommentViewModel // 수정: DiscussCommentViewModel import 추가
 import com.solux.dorandoran.presentation.discuss.viewmodel.DiscussViewModel
-import com.solux.dorandoran.presentation.discuss.viewmodel.ArgumentViewModel
 
 @Composable
 fun DiscussionRoomRoute(
     navigator: DiscussNavigator,
     discussionId: Int,
     viewModel: DiscussViewModel = hiltViewModel(),
-    argumentViewModel: ArgumentViewModel = hiltViewModel()
+    discussCommentViewModel: DiscussCommentViewModel = hiltViewModel() // 수정: 댓글 ViewModel 추가
 ) {
     val selectedDiscussion = viewModel.getDiscussionById(discussionId)
     if (selectedDiscussion != null) {
@@ -54,7 +54,7 @@ fun DiscussionRoomRoute(
                 selectedBook = selectedDiscussion,
                 book = book,
                 discussionsForBook = bookDiscussions,
-                argumentViewModel = argumentViewModel,
+                discussCommentViewModel = discussCommentViewModel, // 수정: 파라미터 연결
                 onBackClick = { navigator.navigateUp() },
                 onAddClick = {},
                 onDiscussionClick = { clickedDiscussionId ->
@@ -73,15 +73,16 @@ fun DiscussionRoomScreen(
     selectedBook: DiscussPageEntity,
     book: BookEntity,
     discussionsForBook: List<DiscussPageEntity>,
-    argumentViewModel: ArgumentViewModel,
+    discussCommentViewModel: DiscussCommentViewModel, // 수정: 타입 명시 및 사용
     onBackClick: () -> Unit = {},
     onAddClick: () -> Unit = {},
     onDiscussionClick: (Int) -> Unit = {}
 ) {
+    // 수정: 개설자 의견을 동적으로 생성하는 대신 고정된 더미 데이터 사용
     val authorArgument = DiscussCommentEntity(
         id = 999,
-        memberNickname = "사용자${selectedBook.memberId}", // memberId로 임시 닉네임 생성
-        content = "이것은 임시 개설자 의견입니다. 실제로는 API에서 가져와야 합니다.",
+        memberNickname = "사용자${selectedBook.memberId}",
+        content = selectedBook.content, // 수정: 실제 토론 내용 사용
         createdAt = selectedBook.createdAt,
         parentId = null
     )

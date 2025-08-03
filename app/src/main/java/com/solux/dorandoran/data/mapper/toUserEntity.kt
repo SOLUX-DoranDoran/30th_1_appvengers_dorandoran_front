@@ -7,6 +7,5 @@ fun ResponseGetUserDto.toUserEntity() = UserEntity(
     id = id,
     email = email,
     nickname = nickname,
-    profileImage = profileImage,
-    createdAt = createdAt
+    profileImage = profileImage
 )

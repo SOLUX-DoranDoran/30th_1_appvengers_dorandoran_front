@@ -4,10 +4,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserEmotionShareResponseGetDto(
-    @SerialName("id") val id: Long,
-    @SerialName("bookName") val bookName: String,
+data class ResponseGetDiscussionItemDto(
+    @SerialName("boardId") val boardId: Int,
+    @SerialName("bookId") val bookId: Int,
+    @SerialName("memberId") val memberId: Int,
+    @SerialName("bookTitle") val bookTitle: String,
     @SerialName("content") val content: String,
-    @SerialName("likeCount") val likeCount: Int,
     @SerialName("createdAt") val createdAt: String
 )

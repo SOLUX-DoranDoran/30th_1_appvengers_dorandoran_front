@@ -31,8 +31,6 @@ import androidx.navigation.NavHostController
 import com.solux.dorandoran.R
 import com.solux.dorandoran.core_ui.component.BottomNavigationItem
 import com.solux.dorandoran.presentation.discuss.navigation.DiscussNavHost
-import com.solux.dorandoran.presentation.discuss.navigation.DiscussNavigator
-import com.solux.dorandoran.presentation.discuss.screen.DiscussRoute
 import com.solux.dorandoran.presentation.home.navigation.HomeNavigator
 import com.solux.dorandoran.presentation.home.screen.HomeRoute
 import com.solux.dorandoran.presentation.main.navigation.MainNavigator

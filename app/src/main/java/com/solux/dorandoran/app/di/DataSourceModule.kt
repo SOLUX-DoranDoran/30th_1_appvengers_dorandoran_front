@@ -1,21 +1,23 @@
 package com.solux.dorandoran.app.di
 
-import com.solux.dorandoran.data.datasource.ArgumentDataSource
 import com.solux.dorandoran.data.datasource.BookDataSource
+import com.solux.dorandoran.data.datasource.DiscussCommentDataSource
 import com.solux.dorandoran.data.datasource.DiscussDataSource
 import com.solux.dorandoran.data.datasource.DiscussionDataSource
 import com.solux.dorandoran.data.datasource.ExampleDataSource
 import com.solux.dorandoran.data.datasource.QuoteDataSource
 import com.solux.dorandoran.data.datasource.RecommendedBookDataSource
 import com.solux.dorandoran.data.datasource.ReviewDataSource
-import com.solux.dorandoran.data.datasourceimpl.ArgumentDataSourceImpl
+import com.solux.dorandoran.data.datasource.UserDataSource
 import com.solux.dorandoran.data.datasourceimpl.BookDataSourceImpl
+import com.solux.dorandoran.data.datasourceimpl.DiscussCommentDataSourceImpl
 import com.solux.dorandoran.data.datasourceimpl.DiscussDataSourceImpl
 import com.solux.dorandoran.data.datasourceimpl.DiscussionDataSourceImpl
 import com.solux.dorandoran.data.datasourceimpl.ExampleDataSourceImpl
 import com.solux.dorandoran.data.datasourceimpl.QuoteDataSourceImpl
 import com.solux.dorandoran.data.datasourceimpl.RecommendedBookDataSourceImpl
 import com.solux.dorandoran.data.datasourceimpl.ReviewDataSourceImpl
+import com.solux.dorandoran.data.datasourceimpl.UserDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -35,7 +37,9 @@ abstract class DataSourceModule {
 
     @Binds
     @Singleton
-    abstract fun bindArgumentDataSource(argumentDataSourceImpl: ArgumentDataSourceImpl): ArgumentDataSource
+    abstract fun bindDiscussCommentDataSource(
+        discussCommentDataSourceImpl: DiscussCommentDataSourceImpl
+    ): DiscussCommentDataSource
 
     @Binds
     @Singleton
@@ -57,4 +61,9 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindDiscussionDataSource(discussionDataSourceImpl: DiscussionDataSourceImpl): DiscussionDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindUserDataSource(userDataSourceImpl: UserDataSourceImpl): UserDataSource
+
 }
