@@ -5,7 +5,6 @@ import androidx.navigation.compose.composable
 import com.solux.dorandoran.presentation.mypage.screen.EmotionShareRoute
 import com.solux.dorandoran.presentation.mypage.screen.MypageRoute
 import com.solux.dorandoran.presentation.mypage.screen.EmotionShareNewRoute
-import com.solux.dorandoran.presentation.review.screen.RecentReviewRoute
 
 fun NavGraphBuilder.mypageNavGraph(
     navigator: MypageNavigator
@@ -22,7 +21,5 @@ fun NavGraphBuilder.mypageNavGraph(
         EmotionShareNewRoute(navigator = navigator)
     }
 
-    composable(route = "recent_review") {
-        RecentReviewRoute(navigator = navigator)
-    }
+    // recent_review는 review 모듈에서 관리하므로 여기서 제거
 }
