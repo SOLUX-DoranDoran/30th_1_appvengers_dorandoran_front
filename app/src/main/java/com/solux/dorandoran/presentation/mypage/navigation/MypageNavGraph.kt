@@ -5,6 +5,7 @@ import androidx.navigation.compose.composable
 import com.solux.dorandoran.presentation.mypage.screen.EmotionShareRoute
 import com.solux.dorandoran.presentation.mypage.screen.MypageRoute
 import com.solux.dorandoran.presentation.mypage.screen.EmotionShareNewRoute
+import com.solux.dorandoran.presentation.review.screen.RecentReviewRoute
 
 fun NavGraphBuilder.mypageNavGraph(
     navigator: MypageNavigator
@@ -19,5 +20,9 @@ fun NavGraphBuilder.mypageNavGraph(
 
     composable(route = "emotion_share_new") {
         EmotionShareNewRoute(navigator = navigator)
+    }
+
+    composable(route = "recent_review") {
+        RecentReviewRoute(navigator = navigator)
     }
 }

@@ -37,6 +37,7 @@ import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.baseRegular
 import com.solux.dorandoran.domain.entity.ReviewDetailEntity
 import com.solux.dorandoran.domain.entity.ReviewListEntity
+import com.solux.dorandoran.presentation.mypage.navigation.MypageNavigator
 import com.solux.dorandoran.presentation.review.navigation.ReviewNavigator
 import com.solux.dorandoran.presentation.review.viewmodel.RecentReviewViewModel
 import java.time.LocalDateTime
@@ -44,7 +45,7 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun RecentReviewRoute(
-    navigator: ReviewNavigator,
+    navigator: MypageNavigator,
     viewModel: RecentReviewViewModel = hiltViewModel()
 ) {
     RecentReviewScreen(

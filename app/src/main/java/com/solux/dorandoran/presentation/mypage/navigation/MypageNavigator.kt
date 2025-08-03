@@ -13,6 +13,10 @@ class MypageNavigator(
         navController.navigate("emotion_share")
     }
 
+    fun navigateToRecentReview() {
+        navController.navigate("recent_review")
+    }
+
     fun navigateToHome() {
         navController.navigate("main") {
             popUpTo("emotion_share") {

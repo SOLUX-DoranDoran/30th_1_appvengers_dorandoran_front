@@ -18,7 +18,6 @@ fun ResponseGetDiscussionDto.toDiscussionEntity() = DiscussionEntity(
         id = memberId,
         email = "",
         nickname = "사용자$memberId",
-        profileImage = null,
-        createdAt = ""
+        profileImage = null
     )
 )

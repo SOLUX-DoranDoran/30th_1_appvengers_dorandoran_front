@@ -9,4 +9,5 @@ interface BookApiService {
     suspend fun getBookInfo(
         @Path("bookId") bookId: Long
     ): ResponseGetBookDto
+
 }
