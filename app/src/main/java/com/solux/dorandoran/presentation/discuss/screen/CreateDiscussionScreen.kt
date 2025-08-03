@@ -22,9 +22,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -41,17 +38,11 @@ import com.solux.dorandoran.presentation.discuss.viewmodel.BoardViewModel
 @Composable
 fun CreateDiscussionRoute(
     navigator: DiscussNavigator,
-    viewModel: BoardViewModel = hiltViewModel()
+    viewModel: BoardViewModel = hiltViewModel() // 수정: BoardViewModel 사용
 ) {
     CreateDiscussionScreen(
         navigator = navigator,
-        viewModel = viewModel,
-        onCreateSuccess = {
-            navigator.navigateUp()
-        },
-        onBackPressed = {
-            navigator.navigateUp()
-        }
+        viewModel = viewModel
     )
 }
 
@@ -59,25 +50,22 @@ fun CreateDiscussionRoute(
 @Composable
 fun CreateDiscussionScreen(
     navigator: DiscussNavigator,
-    viewModel: BoardViewModel,
-    onCreateSuccess: () -> Unit = {},
-    onBackPressed: () -> Unit = {}
+    viewModel: BoardViewModel // 수정: BoardViewModel 사용
 ) {
+    // 수정: BoardViewModel의 토론 생성 관련 상태들 사용
     val title by viewModel.createBoardTitle
     val content by viewModel.createBoardContent
     val bookTitle by viewModel.createBoardBookTitle
     val isLoading by viewModel.isLoading
     val errorMessage by viewModel.errorMessage
 
-    // 토론 생성 성공 감지를 위한 상태 추적
-    var hasTriedToCreate by remember { mutableStateOf(false) }
-
+    // 수정: 토론 생성 성공 시 네비게이션 처리
     LaunchedEffect(isLoading) {
-        // 로딩이 끝났고, 생성을 시도했었고, 에러가 없고, 폼이 초기화되었다면 성공
-        if (!isLoading && hasTriedToCreate && errorMessage == null &&
+        if (!isLoading && errorMessage == null &&
             title.isEmpty() && content.isEmpty() && bookTitle.isEmpty()) {
-            Log.d("CreateDiscussionScreen", "토론 생성 성공, 콜백 호출")
-            onCreateSuccess()
+            // 폼이 초기화되었다면 생성 성공으로 간주하고 뒤로 이동
+            Log.d("CreateDiscussionScreen", "토론 생성 성공, 이전 화면으로 이동")
+            navigator.navigateUp()
         }
     }
 
@@ -95,7 +83,7 @@ fun CreateDiscussionScreen(
                     IconButton(
                         onClick = {
                             Log.d("CreateDiscussionScreen", "뒤로가기 클릭")
-                            onBackPressed()
+                            navigator.navigateUp()
                         }
                     ) {
                         Icon(
@@ -134,7 +122,7 @@ fun CreateDiscussionScreen(
                     .padding(16.dp)
             ) {
 
-                // 도서 제목 입력
+                // 수정: 도서 제목 입력
                 OutlinedTextField(
                     value = bookTitle,
                     onValueChange = { newValue ->
@@ -149,7 +137,7 @@ fun CreateDiscussionScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // 토론 제목 입력
+                // 수정: 토론 제목 입력
                 OutlinedTextField(
                     value = title,
                     onValueChange = { newValue ->
@@ -164,7 +152,7 @@ fun CreateDiscussionScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // 토론 내용 입력
+                // 수정: 토론 내용 입력
                 OutlinedTextField(
                     value = content,
                     onValueChange = { newValue ->
@@ -180,7 +168,7 @@ fun CreateDiscussionScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // 에러 메시지 표시
+                // 수정: 에러 메시지 표시
                 if (errorMessage != null) {
                     Text(
                         text = errorMessage!!,
@@ -189,11 +177,10 @@ fun CreateDiscussionScreen(
                     )
                 }
 
-                // 토론 생성 버튼
+                // 수정: 토론 생성 버튼
                 Button(
                     onClick = {
                         Log.d("CreateDiscussionScreen", "토론 생성 버튼 클릭")
-                        hasTriedToCreate = true
                         viewModel.createBoard()
                     },
                     modifier = Modifier.fillMaxWidth(),
@@ -204,7 +191,7 @@ fun CreateDiscussionScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // 입력 가이드
+                // 수정: 입력 가이드
                 Text(
                     text = "* 모든 필드를 입력해주세요\n* 토론 내용은 구체적으로 작성해주세요\n* 다른 사용자들이 참여하고 싶어할 만한 주제로 작성해주세요",
                     style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
