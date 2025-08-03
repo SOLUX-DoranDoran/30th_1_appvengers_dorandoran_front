@@ -9,16 +9,14 @@ interface DiscussCommentApiService {
 
     @GET("/api/boards/{boardId}/comments")
     suspend fun getDiscussComments(
-        @Header("Authorization") authorization: String,
         @Path("boardId") boardId: Int,
-        @Query("page") page: Int = 0,
+        @Query("page") page: Int = 1,
         @Query("size") size: Int = 10,
         @Query("sort") sort: String = "createdAt,asc"
     ): ResponseGetDiscussCommentsDto
 
     @POST("/api/boards/{boardId}/comments")
     suspend fun createDiscussComment(
-        @Header("Authorization") authorization: String,
         @Path("boardId") boardId: Int,
         @Body request: RequestCreateDiscussCommentDto
     ): ResponseCreateDiscussCommentDto

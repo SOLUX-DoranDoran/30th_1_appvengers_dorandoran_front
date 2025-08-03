@@ -1,6 +1,7 @@
 package com.solux.dorandoran.data.repositoryimpl
 
 import android.content.Context
+import android.util.Log
 import com.solux.dorandoran.data.datasource.DiscussCommentDataSource
 import com.solux.dorandoran.data.mapper.toDiscussCommentEntity
 import com.solux.dorandoran.data.mapper.toDiscussCommentEntityList
@@ -14,9 +15,8 @@ class DiscussCommentRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : DiscussCommentRepository {
 
-    private suspend fun getAccessToken(): String {
-        // 수정: 실제 토큰 관리 로직으로 대체 필요
-        return "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTA0NDM0Nzk3NDYyMjYwOTcxMjIiLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzU0OTk5OTUyfQ.WvghkrfFxUIWnQjwVS8OJHx_LQrnnxldh9A7nUG26is"
+    companion object {
+        private const val TAG = "DiscussCommentRepositoryImpl"
     }
 
     override suspend fun getDiscussComments(
@@ -25,14 +25,19 @@ class DiscussCommentRepositoryImpl @Inject constructor(
         size: Int
     ): Result<List<DiscussCommentEntity>> {
         return runCatching {
-            val token = getAccessToken()
+            Log.d(TAG, "댓글 목록 조회 시작 - boardId: $boardId, page: $page, size: $size")
+
             val response = discussCommentDataSource.getDiscussComments(
-                token = token,
                 boardId = boardId,
                 page = page,
                 size = size
             )
-            response.toDiscussCommentEntityList()
+            val result = response.toDiscussCommentEntityList()
+
+            Log.d(TAG, "댓글 목록 조회 성공 - ${result.size}개")
+            result
+        }.onFailure { exception ->
+            Log.e(TAG, "댓글 목록 조회 실패 - boardId: $boardId", exception)
         }
     }
 
@@ -42,14 +47,21 @@ class DiscussCommentRepositoryImpl @Inject constructor(
         parentId: Int?
     ): Result<DiscussCommentEntity> {
         return runCatching {
-            val token = getAccessToken()
+            val commentType = if (parentId == null) "원댓글" else "대댓글"
+            Log.d(TAG, "$commentType 작성 시작 - boardId: $boardId, parentId: $parentId")
+
             val response = discussCommentDataSource.createDiscussComment(
-                token = token,
                 boardId = boardId,
                 content = content,
                 parentId = parentId
             )
-            response.toDiscussCommentEntity()
+            val result = response.toDiscussCommentEntity()
+
+            Log.d(TAG, "$commentType 작성 성공 - commentId: ${result.id}")
+            result
+        }.onFailure { exception ->
+            val commentType = if (parentId == null) "원댓글" else "대댓글"
+            Log.e(TAG, "$commentType 작성 실패 - boardId: $boardId", exception)
         }
     }
 }

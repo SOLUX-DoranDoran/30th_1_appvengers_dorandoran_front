@@ -1,5 +1,6 @@
 package com.solux.dorandoran.app.di
 
+import com.solux.dorandoran.data.service.BoardApiService
 import com.solux.dorandoran.data.service.BookApiService
 import com.solux.dorandoran.data.service.DiscussApiService
 import com.solux.dorandoran.data.service.DiscussCommentApiService
@@ -67,6 +68,12 @@ object ServiceModule {
     fun provideDiscussionApiService(
         @DoranDoranRetrofit retrofit: Retrofit
     ): DiscussionApiService = retrofit.create(DiscussionApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideBoardApiService(
+        @DoranDoranRetrofit retrofit: Retrofit
+    ): BoardApiService = retrofit.create(BoardApiService::class.java)
 
     @Provides
     @Singleton

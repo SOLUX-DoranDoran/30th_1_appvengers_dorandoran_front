@@ -11,7 +11,7 @@ interface DiscussApiService {
     @GET("/api/discussions")
     suspend fun getDiscussions(
         @Header("Authorization") authorization: String,
-        @Query("page") page: Int = 0,
+        @Query("page") page: Int = 1,
         @Query("size") size: Int = 10,
         @Query("sort") sort: String = "createdAt,desc"
     ): ResponseGetDiscussionsDto
