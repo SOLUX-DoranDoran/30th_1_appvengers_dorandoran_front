@@ -12,13 +12,11 @@ class DiscussCommentDataSourceImpl @Inject constructor(
 ) : DiscussCommentDataSource {
 
     override suspend fun getDiscussComments(
-        token: String,
         boardId: Int,
         page: Int,
         size: Int
     ): ResponseGetDiscussCommentsDto {
         return discussCommentApiService.getDiscussComments(
-            authorization = "Bearer $token",
             boardId = boardId,
             page = page,
             size = size
@@ -26,13 +24,11 @@ class DiscussCommentDataSourceImpl @Inject constructor(
     }
 
     override suspend fun createDiscussComment(
-        token: String,
         boardId: Int,
         content: String,
         parentId: Int?
     ): ResponseCreateDiscussCommentDto {
         return discussCommentApiService.createDiscussComment(
-            authorization = "Bearer $token",
             boardId = boardId,
             request = RequestCreateDiscussCommentDto(
                 content = content,

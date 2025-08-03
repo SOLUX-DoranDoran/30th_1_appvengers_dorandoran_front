@@ -6,13 +6,10 @@ import retrofit2.http.*
 interface UserApiService {
 
     @GET("/api/users/me")
-    suspend fun getUserInfo(
-        @Header("Authorization") authorization: String
-    ): ResponseGetUserDto
+    suspend fun getUserInfo(): ResponseGetUserDto
 
     @PUT("/api/users/me")
     suspend fun updateUserProfile(
-        @Header("Authorization") authorization: String,
         @Field("nickname") nickname: String,
         @Field("profileImage") profileImage: String?
     ): ResponseGetUserDto

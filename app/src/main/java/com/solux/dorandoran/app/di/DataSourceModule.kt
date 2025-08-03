@@ -1,5 +1,6 @@
 package com.solux.dorandoran.app.di
 
+import com.solux.dorandoran.data.datasource.BoardDataSource
 import com.solux.dorandoran.data.datasource.BookDataSource
 import com.solux.dorandoran.data.datasource.DiscussCommentDataSource
 import com.solux.dorandoran.data.datasource.DiscussDataSource
@@ -9,6 +10,7 @@ import com.solux.dorandoran.data.datasource.QuoteDataSource
 import com.solux.dorandoran.data.datasource.RecommendedBookDataSource
 import com.solux.dorandoran.data.datasource.ReviewDataSource
 import com.solux.dorandoran.data.datasource.UserDataSource
+import com.solux.dorandoran.data.datasourceimpl.BoardDataSourceImpl
 import com.solux.dorandoran.data.datasourceimpl.BookDataSourceImpl
 import com.solux.dorandoran.data.datasourceimpl.DiscussCommentDataSourceImpl
 import com.solux.dorandoran.data.datasourceimpl.DiscussDataSourceImpl
@@ -49,6 +51,10 @@ abstract class DataSourceModule {
     @Singleton
     abstract fun bindRecommendedBookDataSource(recommendedBookDataSourceImpl: RecommendedBookDataSourceImpl)
     : RecommendedBookDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindBoardDataSource(boardDataSourceImpl: BoardDataSourceImpl): BoardDataSource
 
     @Binds
     @Singleton

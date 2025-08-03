@@ -68,7 +68,15 @@ fun RecentReviewScreen(
             .background(Background02)
     ) {
         RecentReviewHeader(
-            onBackClick = { navigator.navigateToHome() }
+            // 수정: 직접 main 화면으로 이동하면서 백스택 정리
+            onBackClick = {
+                navigator.navController.navigate("main") {
+                    // 현재 화면을 백스택에서 제거
+                    popUpTo("recent_review") { inclusive = true }
+                    // 중복 인스턴스 방지
+                    launchSingleTop = true
+                }
+            }
         )
 
         when {

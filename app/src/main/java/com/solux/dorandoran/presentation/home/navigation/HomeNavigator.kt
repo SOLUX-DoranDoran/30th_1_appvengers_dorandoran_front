@@ -17,18 +17,16 @@ class HomeNavigator(
 
     // 전체 토론 화면으로 이동
     fun navigateToDiscussDetail() {
-        navController.navigate("discuss_detail")
+        navController.navigate("discuss")
     }
 
     // 토론 중 화면으로 이동
-    fun navigateToDiscussing() {
-        navController.navigate("discussing")
+    fun navigateToDiscussing(discussionId: Long) {
+        navController.navigate("discussionRoom/$discussionId") //수정: discussionRoom으로 이동, 기본값 1
     }
 
     // 감성 공유 화면으로 이동
     fun navigateToEmotionShare() {
         navController.navigate("emotion_share")
     }
-
-
 }

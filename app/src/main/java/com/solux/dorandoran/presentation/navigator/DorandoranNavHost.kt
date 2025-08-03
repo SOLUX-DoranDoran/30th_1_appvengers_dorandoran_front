@@ -68,9 +68,11 @@ fun DoranDoranNavHost(
                 mypageNavigator
             )
             homeNavGraph(homeNavigator)
+
+            discussNavGraph(discussNavigator)
+
             reviewNavGraph(reviewNavigator)
             mypageNavGraph(mypageNavigator)
-
         }
     }
 }
