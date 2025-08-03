@@ -4,10 +4,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ResponseGetUserDto(
+data class ResponseGetUserQuoteDto(
     @SerialName("id") val id: Long,
-    @SerialName("email") val email: String,
-    @SerialName("nickname") val nickname: String,
-    @SerialName("profileImage") val profileImage: String?,
+    @SerialName("bookName") val bookName: String,
+    @SerialName("content") val content: String,
+    @SerialName("likeCount") val likeCount: Int,
     @SerialName("createdAt") val createdAt: String
 )
