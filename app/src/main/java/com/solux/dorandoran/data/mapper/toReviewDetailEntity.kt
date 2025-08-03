@@ -1,6 +1,7 @@
 package com.solux.dorandoran.data.mapper
 
 import com.solux.dorandoran.data.dto.response.ResponseGetReviewDetailDto
+import com.solux.dorandoran.data.dto.response.ResponseGetUserReviewDto
 import com.solux.dorandoran.domain.entity.ReviewDetailEntity
 
 fun ResponseGetReviewDetailDto.toReviewDetailEntity() = ReviewDetailEntity(
@@ -18,4 +19,15 @@ fun ResponseGetReviewDetailDto.toReviewDetailEntity() = ReviewDetailEntity(
     commentCount = 0,
     comments = emptyList(),
     isCommentsVisible = false
+)
+
+fun ResponseGetUserReviewDto.toReviewDetailEntity() = ReviewDetailEntity(
+    id = id,
+    bookTitle = bookTitle,
+    coverImageUrl = coverImageUrl,
+    content = content,
+    rating = rating,
+    createdAt = createdAt,
+    nickname = nickname,
+    profileImage = profileImage
 )

@@ -5,5 +5,5 @@ data class UserQuoteEntity(
     val bookName: String,
     val content: String,
     val createdAt: String,
-    val likeCount: Int = 0,
+    val likeCount: Int,
 )
